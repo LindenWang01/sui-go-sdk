@@ -57,7 +57,7 @@ type SplitCoinRequest struct {
 	CoinObjectId string   `json:"coinObjectId"`
 	SplitAmounts []string `json:"splitAmounts"`
 	// gas object to be used in this transaction, node will pick one from the signer's possession if not provided
-	Gas string `json:"gas"`
+	Gas *string `json:"gas"`
 	// the gas budget, the transaction will fail if the gas cost exceed the budget
 	GasBudget string `json:"gasBudget"`
 }
