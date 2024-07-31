@@ -198,12 +198,12 @@ type TryRunTransactionBlockResponse struct {
 }
 
 type DevInspectTransactionBlockResponse struct {
-	Effects    SuiEffects         `json:"effects,omitempty"`
-	Events     []SuiEventResponse `json:"events,omitempty"`
-	Error      string             `json:"error,omitempty"`
-	RawEffects string             `json:"rawEffects,omitempty"`
-	RawTxnData string             `json:"rawTxnData,omitempty"`
-	Results    map[string]any     `json:"results,omitempty"`
+	Effects SuiEffects         `json:"effects,omitempty"`
+	Events  []SuiEventResponse `json:"events,omitempty"`
+	// Error      string             `json:"error,omitempty"`
+	// RawEffects string             `json:"rawEffects,omitempty"`
+	// RawTxnData string             `json:"rawTxnData,omitempty"`
+	// Results    map[string]any     `json:"results,omitempty"`
 }
 
 func (o ObjectChange) GetObjectChangeAddressOwner() string {
