@@ -449,8 +449,8 @@ func (s *suiWriteTransactionImpl) SignAndExecuteTransactionBlock(ctx context.Con
 }
 
 // TryRunExecuteTransactionBlock
-func (s *suiWriteTransactionImpl) TryRunTransactionBlock(ctx context.Context, req models.TryRunTransactionBlockRequest) (models.SuiTransactionBlockResponse, error) {
-	var rsp models.SuiTransactionBlockResponse
+func (s *suiWriteTransactionImpl) TryRunTransactionBlock(ctx context.Context, req models.TryRunTransactionBlockRequest) (models.TryRunTransactionBlockResponse, error) {
+	var rsp models.TryRunTransactionBlockResponse
 
 	respBytes, err := s.conn.Request(ctx, httpconn.Operation{
 		Method: "sui_dryRunTransactionBlock",
