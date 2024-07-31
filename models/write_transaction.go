@@ -2,6 +2,7 @@ package models
 
 import (
 	"crypto/ed25519"
+
 	"github.com/block-vision/sui-go-sdk/models/sui_types"
 )
 
@@ -212,4 +213,8 @@ type SignAndExecuteTransactionBlockRequest struct {
 	Options SuiTransactionBlockOptions `json:"options"`
 	// The optional enumeration values are: `WaitForEffectsCert`, or `WaitForLocalExecution`
 	RequestType string `json:"requestType"`
+}
+
+type TryRunTransactionBlockRequest struct {
+	TxnMetaData TxnMetaData
 }

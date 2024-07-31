@@ -7,6 +7,7 @@ import (
 	"context"
 	"encoding/json"
 	"errors"
+
 	"github.com/block-vision/sui-go-sdk/common/httpconn"
 	"github.com/block-vision/sui-go-sdk/models"
 	"github.com/tidwall/gjson"
@@ -28,6 +29,7 @@ type IWriteTransactionAPI interface {
 	RequestWithdrawStake(ctx context.Context, req models.WithdrawStakeRequest) (models.TxnMetaData, error)
 	BatchTransaction(ctx context.Context, req models.BatchTransactionRequest) (models.BatchTransactionResponse, error)
 	SignAndExecuteTransactionBlock(ctx context.Context, req models.SignAndExecuteTransactionBlockRequest) (models.SuiTransactionBlockResponse, error)
+	TryRunTransactionBlock(ctx context.Context, req models.TryRunTransactionBlockRequest) (models.SuiTransactionBlockResponse, error)
 }
 
 type suiWriteTransactionImpl struct {
@@ -427,6 +429,33 @@ func (s *suiWriteTransactionImpl) SignAndExecuteTransactionBlock(ctx context.Con
 			[]string{signedTxn.Signature},
 			req.Options,
 			req.RequestType,
+		},
+	})
+
+	if err != nil {
+		return rsp, err
+	}
+
+	if gjson.ParseBytes(respBytes).Get("error").Exists() {
+		return rsp, errors.New(gjson.ParseBytes(respBytes).Get("error").String())
+	}
+
+	err = json.Unmarshal([]byte(gjson.ParseBytes(respBytes).Get("result").String()), &rsp)
+	if err != nil {
+		return rsp, err
+	}
+
+	return rsp, nil
+}
+
+// TryRunExecuteTransactionBlock
+func (s *suiWriteTransactionImpl) TryRunTransactionBlock(ctx context.Context, req models.TryRunTransactionBlockRequest) (models.SuiTransactionBlockResponse, error) {
+	var rsp models.SuiTransactionBlockResponse
+
+	respBytes, err := s.conn.Request(ctx, httpconn.Operation{
+		Method: "sui_dryRunTransactionBlock",
+		Params: []interface{}{
+			req.TxnMetaData.TxBytes,
 		},
 	})
 
