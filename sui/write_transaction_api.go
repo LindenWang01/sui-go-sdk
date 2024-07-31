@@ -30,6 +30,7 @@ type IWriteTransactionAPI interface {
 	BatchTransaction(ctx context.Context, req models.BatchTransactionRequest) (models.BatchTransactionResponse, error)
 	SignAndExecuteTransactionBlock(ctx context.Context, req models.SignAndExecuteTransactionBlockRequest) (models.SuiTransactionBlockResponse, error)
 	TryRunTransactionBlock(ctx context.Context, req models.TryRunTransactionBlockRequest) (models.TryRunTransactionBlockResponse, error)
+	DevInspectTransactionBlock(ctx context.Context, req models.DevInspectTransactionBlockRequest) (models.DevInspectTransactionBlockResponse, error)
 }
 
 type suiWriteTransactionImpl struct {
@@ -448,13 +449,42 @@ func (s *suiWriteTransactionImpl) SignAndExecuteTransactionBlock(ctx context.Con
 	return rsp, nil
 }
 
-// TryRunExecuteTransactionBlock
+// TryRunExecuteTransactionBlock return transaction execution effects including the gas cost summary, while the effects are not committed to the chain.
 func (s *suiWriteTransactionImpl) TryRunTransactionBlock(ctx context.Context, req models.TryRunTransactionBlockRequest) (models.TryRunTransactionBlockResponse, error) {
 	var rsp models.TryRunTransactionBlockResponse
 
 	respBytes, err := s.conn.Request(ctx, httpconn.Operation{
 		Method: "sui_dryRunTransactionBlock",
 		Params: []interface{}{
+			req.TxnMetaData.TxBytes,
+		},
+	})
+
+	if err != nil {
+		return rsp, err
+	}
+
+	if gjson.ParseBytes(respBytes).Get("error").Exists() {
+		return rsp, errors.New(gjson.ParseBytes(respBytes).Get("error").String())
+	}
+
+	err = json.Unmarshal([]byte(gjson.ParseBytes(respBytes).Get("result").String()), &rsp)
+	if err != nil {
+		return rsp, err
+	}
+
+	return rsp, nil
+}
+
+// DevInspectTransactionBlock runs the transaction in dev-inspect mode. Which allows for nearly any transaction (or Move call) with any arguments.
+// Detailed results are provided, including both the transaction effects and any return values.
+func (s *suiWriteTransactionImpl) DevInspectTransactionBlock(ctx context.Context, req models.DevInspectTransactionBlockRequest) (models.DevInspectTransactionBlockResponse, error) {
+	var rsp models.DevInspectTransactionBlockResponse
+
+	respBytes, err := s.conn.Request(ctx, httpconn.Operation{
+		Method: "sui_devInspectTransactionBlock",
+		Params: []interface{}{
+			req.Sender,
 			req.TxnMetaData.TxBytes,
 		},
 	})
