@@ -2,6 +2,7 @@ package models
 
 import (
 	"encoding/json"
+
 	"github.com/tidwall/gjson"
 )
 
@@ -186,6 +187,14 @@ type SuiTransactionBlockResponse struct {
 	TimestampMs             string              `json:"timestampMs,omitempty"`
 	Checkpoint              string              `json:"checkpoint,omitempty"`
 	ConfirmedLocalExecution bool                `json:"confirmedLocalExecution,omitempty"`
+}
+
+type TryRunTransactionBlockResponse struct {
+	Effects        SuiEffects         `json:"effects,omitempty"`
+	Events         []SuiEventResponse `json:"events,omitempty"`
+	ObjectChanges  []ObjectChange     `json:"objectChanges,omitempty"`
+	BalanceChanges []BalanceChanges   `json:"balanceChanges,omitempty"`
+	Input          map[string]any     `json:"input,omitempty"`
 }
 
 func (o ObjectChange) GetObjectChangeAddressOwner() string {

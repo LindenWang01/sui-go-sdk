@@ -29,7 +29,7 @@ type IWriteTransactionAPI interface {
 	RequestWithdrawStake(ctx context.Context, req models.WithdrawStakeRequest) (models.TxnMetaData, error)
 	BatchTransaction(ctx context.Context, req models.BatchTransactionRequest) (models.BatchTransactionResponse, error)
 	SignAndExecuteTransactionBlock(ctx context.Context, req models.SignAndExecuteTransactionBlockRequest) (models.SuiTransactionBlockResponse, error)
-	TryRunTransactionBlock(ctx context.Context, req models.TryRunTransactionBlockRequest) (models.SuiTransactionBlockResponse, error)
+	TryRunTransactionBlock(ctx context.Context, req models.TryRunTransactionBlockRequest) (models.TryRunTransactionBlockResponse, error)
 }
 
 type suiWriteTransactionImpl struct {
