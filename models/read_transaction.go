@@ -178,6 +178,7 @@ type ModifiedAtVersions struct {
 
 type SuiTransactionBlockResponse struct {
 	Digest                  string              `json:"digest"`
+	Input                   map[string]any      `json:"input,omitempty"`
 	Transaction             SuiTransactionBlock `json:"transaction,omitempty"`
 	RawTransaction          string              `json:"rawTransaction,omitempty"`
 	Effects                 SuiEffects          `json:"effects,omitempty"`
