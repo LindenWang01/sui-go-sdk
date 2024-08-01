@@ -189,23 +189,6 @@ type SuiTransactionBlockResponse struct {
 	ConfirmedLocalExecution bool                `json:"confirmedLocalExecution,omitempty"`
 }
 
-type TryRunTransactionBlockResponse struct {
-	Effects        SuiEffects         `json:"effects,omitempty"`
-	Events         []SuiEventResponse `json:"events,omitempty"`
-	ObjectChanges  []ObjectChange     `json:"objectChanges,omitempty"`
-	BalanceChanges []BalanceChanges   `json:"balanceChanges,omitempty"`
-	Input          map[string]any     `json:"input,omitempty"`
-}
-
-type DevInspectTransactionBlockResponse struct {
-	Effects SuiEffects         `json:"effects,omitempty"`
-	Events  []SuiEventResponse `json:"events,omitempty"`
-	// Error      string             `json:"error,omitempty"`
-	// RawEffects string             `json:"rawEffects,omitempty"`
-	// RawTxnData string             `json:"rawTxnData,omitempty"`
-	// Results    map[string]any     `json:"results,omitempty"`
-}
-
 func (o ObjectChange) GetObjectChangeAddressOwner() string {
 	b, err := json.Marshal(o.Owner)
 	if err != nil {

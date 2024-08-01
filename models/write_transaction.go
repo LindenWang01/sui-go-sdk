@@ -214,13 +214,3 @@ type SignAndExecuteTransactionBlockRequest struct {
 	// The optional enumeration values are: `WaitForEffectsCert`, or `WaitForLocalExecution`
 	RequestType string `json:"requestType"`
 }
-
-type TryRunTransactionBlockRequest struct {
-	TxnMetaData TxnMetaData
-}
-
-type DevInspectTransactionBlockRequest struct {
-	TxnMetaData TxnMetaData
-	// the transaction signer's Sui address
-	Sender string `json:"sender_address"`
-}
